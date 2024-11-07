@@ -54,7 +54,7 @@
 
 
     //TODO
-    $sqlmain= "select appointment.appoid,schedule.scheduleid,schedule.title,doctor.docname,patient.pname,schedule.scheduledate,schedule.scheduletime,appointment.apponum,appointment.appodate from schedule inner join appointment on schedule.scheduleid=appointment.scheduleid inner join patient on patient.pid=appointment.pid inner join doctor on schedule.docid=doctor.docid  where  patient.pid=$userid ";
+    $sqlmain= "select * FROM appointments  where  student_id=$userid ";
 
     if($_POST){
         //print_r($_POST);
@@ -73,7 +73,7 @@
 
     }
 
-    $sqlmain.="order by appointment.appodate  asc";
+    $sqlmain.="order by appointments.appointment_date  asc";
     $result= $database->query($sqlmain);
     ?>
     <div class="container">
@@ -252,7 +252,7 @@
                                             $scheduledate=$row["scheduledate"];
                                             $scheduletime=$row["scheduletime"];
                                             $apponum=$row["apponum"];
-                                            $appodate=$row["appodate"];
+                                            $appointment_date=$row["appointment_date"];
                                             $appoid=$row["appoid"];
     
                                             if($scheduleid==""){
@@ -265,7 +265,7 @@
                                                     
                                                         <div style="width:100%;">
                                                         <div class="h3-search">
-                                                                    Booking Date: '.substr($appodate,0,30).'<br>
+                                                                    Booking Date: '.substr($appointment_date,0,30).'<br>
                                                                     Reference Number: OC-000-'.$appoid.'
                                                                 </div>
                                                                 <div class="h1-search">
@@ -320,7 +320,7 @@
                                 //         </td>
                                         
                                 //         <td style="text-align:center;">
-                                //             '.$appodate.'
+                                //             '.$appointment_date.'
                                 //         </td>
 
                                 //         <td>

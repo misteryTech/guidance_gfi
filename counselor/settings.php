@@ -33,7 +33,7 @@
     session_start();
 
     if(isset($_SESSION["user"])){
-        if(($_SESSION["user"])=="" or $_SESSION['usertype']!='d'){
+        if(($_SESSION["user"])=="" or $_SESSION['usertype']!='c'){
             header("location: ../login.php");
         }else{
             $useremail=$_SESSION["user"];
@@ -46,10 +46,10 @@
 
     //import database
     include("../connection.php");
-    $userrow = $database->query("select * from doctor where docemail='$useremail'");
+    $userrow = $database->query("select * from counselor where couemail='$useremail'");
     $userfetch=$userrow->fetch_assoc();
-    $userid= $userfetch["docid"];
-    $username=$userfetch["docname"];
+    $userid= $userfetch["couid"];
+    $username=$userfetch["couname"];
 
 
     //echo $userid;
@@ -90,16 +90,22 @@
                     </td>
                 </tr>
                 
-                <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-session">
-                        <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">My Sessions</p></div></a>
+              
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-patient">
+                        <a href="student.php" class="non-style-link-menu"><div><p class="menu-text">My Students</p></div></a>
                     </td>
                 </tr>
+                
+
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-patient">
-                        <a href="patient.php" class="non-style-link-menu"><div><p class="menu-text">My Patients</p></a></div>
+                        <a href="incedent_report.php" class="non-style-link-menu"><div><p class="menu-text">Incident Report</p></a></div>
                     </td>
                 </tr>
+
+
+                
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-settings  menu-active menu-icon-settings-active">
                         <a href="settings.php" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Settings</p></a></div>
@@ -133,9 +139,9 @@
                                 echo $today;
 
 
-                                $patientrow = $database->query("select  * from  patient;");
+                                $studentrow = $database->query("select  * from  student;");
                                 $doctorrow = $database->query("select  * from  doctor;");
-                                $appointmentrow = $database->query("select  * from  appointment where appodate>='$today';");
+                                $appointmentrow = $database->query("select  * from  appointments where appointment_date>='$today';");
                                 $schedulerow = $database->query("select  * from  schedule where scheduledate='$today';");
 
 
@@ -264,13 +270,13 @@
             </div>
             ';
         }elseif($action=='view'){
-            $sqlmain= "select * from doctor where docid='$id'";
+            $sqlmain= "select * from counselor where couid='$id'";
             $result= $database->query($sqlmain);
             $row=$result->fetch_assoc();
-            $name=$row["docname"];
-            $email=$row["docemail"];
-            $nic=$row['docnic'];
-            $tele=$row['doctel'];
+            $name=$row["couname"];
+            $email=$row["couemail"];
+            $nic=$row['counic'];
+            $tele=$row['coutel'];
             echo '
             <div id="popup1" class="overlay">
                     <div class="popup">
@@ -346,13 +352,13 @@
             </div>
             ';
         }elseif($action=='edit'){
-            $sqlmain= "select * from doctor where docid='$id'";
+            $sqlmain= "select * from counselor where couid='$id'";
             $result= $database->query($sqlmain);
             $row=$result->fetch_assoc();
-            $name=$row["docname"];
-            $email=$row["docemail"];
-            $nic=$row['docnic'];
-            $tele=$row['doctel'];
+            $name=$row["couname"];
+            $email=$row["couemail"];
+            $nic=$row['counic'];
+            $tele=$row['coutel'];
 
             $error_1=$_GET["error"];
                 $errorlist= array(

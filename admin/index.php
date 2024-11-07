@@ -95,7 +95,7 @@
 
                                 $patientrow = $database->query("select  * from  student;");
                                 $counselorrow = $database->query("select  * from  counselor;");
-                                $appointmentrow = $database->query("select  * from  appointment where appodate>='$today';");
+                                $appointmentrow = $database->query("select  * from  appointments where appointment_date>='$today';");
                                 $schedulerow = $database->query("select  * from  schedule where scheduledate='$today';");
 
 
@@ -240,69 +240,7 @@
                                         </thead>
                                         <tbody>
                                         
-                                            <?php
-                                            $nextweek=date("Y-m-d",strtotime("+1 week"));
-                                            $sqlmain= "select appointment.appoid,schedule.scheduleid,schedule.title,doctor.docname,patient.pname,schedule.scheduledate,schedule.scheduletime,appointment.apponum,appointment.appodate from schedule inner join appointment on schedule.scheduleid=appointment.scheduleid inner join patient on patient.pid=appointment.pid inner join doctor on schedule.docid=doctor.docid  where schedule.scheduledate>='$today'  and schedule.scheduledate<='$nextweek' order by schedule.scheduledate desc";
-
-                                                $result= $database->query($sqlmain);
-                
-                                                if($result->num_rows==0){
-                                                    echo '<tr>
-                                                    <td colspan="3">
-                                                    <br><br><br><br>
-                                                    <center>
-                                                    <img src="../img/notfound.svg" width="25%">
-                                                    
-                                                    <br>
-                                                    <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We  couldnt find anything related to your keywords !</p>
-                                                    <a class="non-style-link" href="appointment.php"><button  class="login-btn btn-primary-soft btn"  style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp; Show all Appointments &nbsp;</font></button>
-                                                    </a>
-                                                    </center>
-                                                    <br><br><br><br>
-                                                    </td>
-                                                    </tr>';
-                                                    
-                                                }
-                                                else{
-                                                for ( $x=0; $x<$result->num_rows;$x++){
-                                                    $row=$result->fetch_assoc();
-                                                    $appoid=$row["appoid"];
-                                                    $scheduleid=$row["scheduleid"];
-                                                    $title=$row["title"];
-                                                    $docname=$row["docname"];
-                                                    $scheduledate=$row["scheduledate"];
-                                                    $scheduletime=$row["scheduletime"];
-                                                    $pname=$row["pname"];
-                                                    $apponum=$row["apponum"];
-                                                    $appodate=$row["appodate"];
-                                                    echo '<tr>
-
-
-                                                        <td style="text-align:center;font-size:23px;font-weight:500; color: var(--btnnicetext);padding:20px;">
-                                                            '.$apponum.'
-                                                            
-                                                        </td>
-
-                                                        <td style="font-weight:600;"> &nbsp;'.
-                                                        
-                                                        substr($pname,0,25)
-                                                        .'</td >
-                                                        <td style="font-weight:600;"> &nbsp;'.
-                                                        
-                                                            substr($docname,0,25)
-                                                            .'</td >
-                                                           
-                                                        
-                                                        <td>
-                                                        '.substr($title,0,15).'
-                                                        </td>
-
-                                                    </tr>';
-                                                    
-                                                }
-                                            }
-                                                 
-                                            ?>
+                                     
                  
                                             </tbody>
                 

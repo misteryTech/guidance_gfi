@@ -175,7 +175,12 @@
                         <a href="index.php" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Home</p></a></div></a>
                     </td>
                 </tr>
-        
+                <tr class="menu-row">
+                    <td class="menu-btn menu-icon-doctor">
+                        <a href="counselor.php" class="non-style-link-menu"><div><p class="menu-text">All Counselor</p></a></div>
+                    </td>
+                </tr>
+                
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-session">
                         <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">Scheduled Sessions</p></div></a>
@@ -187,11 +192,9 @@
                     </td>
                 </tr>
                 <tr class="menu-row" >
-                <td class="menu-btn menu-icon-pds">
-    <a href="pds_layout/personal-sheet.php?pid=<?php echo urlencode($userid); ?>" class="non-style-link-menu">
-        <div><p class="menu-text">My PDS</p></div>
-    </a>
-</td>
+                    <td class="menu-btn menu-icon-pds">
+                        <a href="pds_layout/personal-sheet.php" class="non-style-link-menu"><div><p class="menu-text">My PDS</p></a></div>
+                    </td>
                 </tr>
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-settings">
@@ -271,7 +274,7 @@
 
                                 <center>
     <form action="process_appointment.php" method="post" style="max-width: 600px; margin: auto; border: 1px solid #ccc; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-        <h2 style="text-align: center;">Set an Appointment</h2>
+        <h2 style="text-align: center;">Appointment Booking Form</h2>
         <table style="width: 100%; border: none;">
 
 
@@ -312,40 +315,6 @@
                 </td>
             </tr>
 
-
-            <tr>
-                <td style="padding: 10px; vertical-align: top;">
-                    <label for="treatment">Treatment:</label>
-                </td>
-                <td style="padding: 10px;">
-                    <select name="treatment" id="treatment" required style="width: 100%; padding: 8px;">
-                        <option value="" disabled>--Select Treatment--</option>
-                        <option value="Anxiety">Anxiety</option>
-                        <option value="Depression">Depression</option>
-                        <option value="Trauma">Trauma</option>
-                        <option value="Substance use/addiction">Substance use/addiction</option>
-                        <option value="Nightmares">Nightmares</option>
-                        <option value="Anger">Anger</option>
-                        <option value="Adjustment to life changes">Adjustment to life changes</option>
-                        <option value="Stress management">Stress management</option>
-                        <option value="Posttraumatic stress disorder (PTSD)">Posttraumatic stress disorder (PTSD)</option>
-                        <option value="Insomnia">Insomnia</option>
-                        <option value="Life transitions">Life transitions</option>
-                        <option value="LCommunication issues">Communication issues</option>
-                        <option value="Life skills">Life skills</option>
-                        <option value="Job-related stress">Job-related stress</option>
-                        <option value="Behavioral concerns">Behavioral concerns</option>
-                        <option value="Grief">Grief</option>
-                        <option value="Abandonment">Abandonment</option>
-                        <option value="Relationship">Relationship</option>
-              
-                
-                    </select>
-                </td>
-            </tr>
-
-
-
             <!-- Reason for Appointment -->
             <tr>
                 <td style="padding: 10px; vertical-align: top;">
@@ -361,7 +330,7 @@
             <!-- Submit Button -->
             <tr>
                 <td colspan="2" style="text-align: center; padding: 20px;">
-                    <button type="submit" style="padding: 10px 20px; font-size: 16px; background-color: #28a745; color: white; border: none; border-radius: 5px;">Set Appointment</button>
+                    <button type="submit" style="padding: 10px 20px; font-size: 16px; background-color: #28a745; color: white; border: none; border-radius: 5px;">Book Appointment</button>
                 </td>
             </tr>
         </table>

@@ -1,7 +1,6 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $firstname = $_POST['Firstname'];
-    $lastname = $_POST['lastname'];
+    $student_id = $_POST['student_id'];
     $civilStatus = $_POST['CivilStatus'];
     $dateOfBirth = $_POST['DateOfBirth'];
     $religion = $_POST['Religion'];
@@ -26,17 +25,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Prepare and bind
-    $stmt = $conn->prepare("INSERT INTO student_registration (Firstname, lastname, CivilStatus, DateOfBirth, Religion, Tribe, Ip, Language, BirthOrder, NumberOfSiblings, child_no, PlaceOfBirth, PermAddress, HousingType, landlord, landlordNumber) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO student_registration (student_id, CivilStatus, DateOfBirth, Religion, Tribe, Ip, Language, BirthOrder, NumberOfSiblings, child_no, PlaceOfBirth, PermAddress, HousingType, landlord, landlordNumber) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-    $stmt->bind_param("ssssssssssssssss",   
-        $firstname, $lastname, $civilStatus, $dateOfBirth, $religion, $tribe, $ip, $language, 
+    $stmt->bind_param("sssssssssssssss",   
+        $student_id, $civilStatus, $dateOfBirth, $religion, $tribe, $ip, $language, 
         $birthOrder, $numberOfSiblings, $childNo, $placeOfBirth, $permAddress, $housingType, 
         $landlord, $landlordNumber
     );
 
     if ($stmt->execute()) {
-        echo "New record created successfully";
+       
+        
+        echo "<script>alert('Appointment booked successfully!');</script>";
+            header("Location: ../index.php");
     } else {
         echo "Error: " . $stmt->error;
     }

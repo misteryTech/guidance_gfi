@@ -2,13 +2,11 @@
 // Start the session
 session_start();
 
-// Retrieve the student ID from the session
-$student_id = isset($_SESSION['pid']) ? $_SESSION['pid'] : '';
-
-// Check if the student ID exists
-if (empty($student_id)) {
-    echo "No student ID found in the session!";
-    exit;
+if (isset($_GET['pid'])) {
+  $student_id = $_GET['pid']; // Retrieve the 'pid' value
+} else {
+  echo "No student ID provided!";
+  exit;
 }
 
 // Database connection (replace with your actual connection details)
@@ -25,7 +23,10 @@ if ($conn->connect_error) {
 }
 
 // Query to fetch the student data based on the session ID
-$sql = "SELECT * FROM student WHERE pid = ?";
+$sql = "SELECT student_registration.*, student.*
+FROM student_registration
+INNER JOIN student ON student.pid = student_registration.student_id
+ WHERE student_id = ?";
 $stmt = $conn->prepare($sql);
 
 // Bind the student_id from the session to the query
@@ -41,15 +42,22 @@ if ($result->num_rows > 0) {
     $student = $result->fetch_assoc();
 
     // Access the student's data here
-    $student_name = $student['pname'];  // Example field
-    $student_email = $student['pemail'];  // Example field
-    
-
-    
-    // Add more fields as necessary
-} else {
-    echo "No student found with ID: $student_id";
+    $CivilStatus = $student['CivilStatus'];  // Example field
+    $pname = $student['pname'];  // Example field
+    $DadeOfBirth = $student['DateOfBirth'];  // Example field
+    $Religion = $student['Religion'];  // Example field
+    $Tribe = $student['Tribe'];  // Example field
+    $Ip = $student['Ip'];  // Example field
+    $Language = $student['Language'];  // Example field
+    $BirthOrder = $student['BirthOrder'];  // Example field
+    $NumberOfSiblings = $student['NumberOfSiblings'];  // Example field
+    $child_no = $student['child_no'];  // Example field
+    $PlaceOfBirth = $student['PlaceOfBirth'];  // Example field
+    $PermAddress = $student['PermAddress'];  // Example field
+  } else {
+    echo "<script>alert('No student found with ID: $student_id'); window.location.href='student.php';</script>";
 }
+
 
 // Close the statement and connection
 $stmt->close();
@@ -67,29 +75,52 @@ $conn->close();
     <script defer src="assets/js/bootstrap.min.js"></script>
     <script defer src="assets/js/script.js"></script>
     <title>Personal Data Sheet</title>
-    
-</head>
-
-
-<style>
-          h3{
-              color: red;
-          }
-          h5{
+    <script>
+        function printPage() {
+            window.print();
+        }
+    </script>
+    <style>
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden; /* Hide everything */
+            }
+            .printable, .printable * {
+                visibility: visible; /* Only show elements with class 'printable' */
+            }
+            .printable {
+                position: absolute; /* Position the printable area */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: auto; /* Auto height */
+            }
+            .btn{
+              visibility: hidden; /* Hide everything */
+            }
+            .student_id{
+              visibility: hidden; /* Hide everything */
+            }
+            
+        }
+        
+        h3 {
             color: red;
-
-          }
-          .btn-submit{
+        }
+        h5 {
+            color: red;
+        }
+        .btn-submit {
             padding: 12px 50px;
-          }
-</style>
+        }
+    </style>
+</head>
 <body>
     <div class="container-fluid">
         <nav class="navbar navbar-light">
-            <div class="container-fluid">
-            
-            </div>
-          </nav>
+            <div class="container-fluid"></div>
+        </nav>
     </div>
 
     <div class="container">
@@ -105,186 +136,119 @@ $conn->close();
         <div class="tab-content" id="nav-tabContent">
           <!-- START WHOLE C1 -->
           <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-              
             <div class="c1-container">
 
               <div class="c1-container-header border-bottom">
-              
                 <br>
-               
-                <a href="../index.php">Back To profile</a>
-
-                <center>    <h3>GENSANTOS FOUNDATION COLLEGE,INC. <br>
-Bulaong Extension, General Santos City
-</h3>
-               <h1>Student Personal DATA SHEET</h1></center>
+                <a href="index.php">Back To profile</a>
+                <center>
+                  <h3>GENSANTOS FOUNDATION COLLEGE,INC. <br>Bulaong Extension, General Santos City</h3>
+                  <h1>Student Personal DATA SHEET</h1>
+                </center>
                 <br>
                 <i>This Student's Personal Data consists of questions regarding you and your family. The purpose of this is for us to know you better and to help you with problems/difficulties that you may encounter along the course of your stay in Holy Trinity College. Please answer the entire question honestly and accurately. Thank you.</i>
               </div>
 
               <br>
 
-              <div class="c1-container-body">
+              <div class="c1-container-body printable"> <!-- Add the 'printable' class -->
                 <form action="process_registration.php" method="post">
                 <div class="holder-box-0">
-                  <div class="form-group row">
-                    <label for="CSID" class="col-sm-2 col-form-label">1. Student ID No.</label>
-                    <div class="col-sm-4">
-                      <input type="text" class="form-control" name="student_id" id="student_id" value="<?php echo $student_id; ?>">
-                    </div>
-                  </div>
-
+                  <div class="form-group row student_id" >
+           
                   <br>
 
-                  <h5><b> I. PERSONAL INFORMATION</b></h3>
+                  <h5><b> I. PERSONAL INFORMATION</b></h5>
                   <hr>
                   <br>
 
                   <div class="form-group row">
-  <label for="Surname" class="col-sm-2 col-form-label">Student Name</label>
-  <div class="col-sm-4">
-    <input type="text" class="form-control" id="Firstname" name="Firstname" value="<?php echo $student_name; ?>" placeholder="Firstname">
-  </div>
-</div>
-
-
+                    <label for="Surname" class="col-sm-2 col-form-label">Student Name</label>
+                    <div class="col-sm-4">
+                      <input type="text" class="form-control" id="Firstname" name="Firstname" value="<?php echo $pname; ?>" placeholder="Firstname" readonly>
+                    </div>
+                  </div>
                 </div>
                 <hr>
                 <div class="holder-box-1">
                   <div class="box-1">
-                    
-                  
-                  <div class="form-group row">
-  <label for="CivilStatus" class="col-sm-4 col-form-label">CIVIL STATUS</label>
-  <div class="col-sm-8">
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="CivilStatus" id="Single" value="Single" checked>
-      <label class="form-check-label" for="Single">Single</label>
-    </div>
-
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="CivilStatus" id="Married" value="Married">
-      <label class="form-check-label" for="Married">Married</label>
-    </div>
-
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="CivilStatus" id="Widowed" value="Widowed">
-      <label class="form-check-label" for="Widowed">Widowed</label>
-    </div>
-
-    <br>
-
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="CivilStatus" id="Separated" value="Separated">
-      <label class="form-check-label" for="Separated">Separated</label>
-    </div>
-
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="CivilStatus" id="Others" value="Others">
-      <label class="form-check-label" for="Others">Other/s</label>
-    </div>
-  </div>
-</div>
-
-<br>
-<div class="form-group row">
-  <label for="DateOfBirth" class="col-sm-4 col-form-label">3. DATE OF BIRTH (mm/dd/yyyy)</label>
-  <div class="col-sm-8">
-    <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" placeholder="Date of Birth">
-  </div>
-</div>
-
-<div class="form-group row mt-3">
-  <label for="Religion" class="col-sm-4 col-form-label">Religion</label>
-  <div class="col-sm-8">
-    <input type="text" class="form-control" id="Religion" name="Religion" placeholder="Religion">
-  </div>
-</div>
-
-<div class="form-group row mt-3">
-  <label for="Tribe" class="col-sm-4 col-form-label">Tribe</label>
-  <div class="col-sm-8">
-    <input type="text" class="form-control" id="Tribe" name="Tribe" placeholder="Tribe">
-  </div>
-</div>
-br
-
-
-
-<div class="form-group row">
-  <label for="Ip" class="col-sm-4 col-form-label">If belonging to IP, please specify</label>
-  <div class="col-sm-8">
-    <input type="text" class="form-control" id="Ip" name="Ip" placeholder="Specify Indigenous Group (IP)">
-  </div>
-</div>
-
-<div class="form-group row mt-3">
-  <label for="Language" class="col-sm-4 col-form-label">Languages/Dialect Spoken</label>
-  <div class="col-sm-8">
-    <input type="text" class="form-control" id="Language" name="Language" placeholder="Language/Dialect">
-  </div>
-</div>
-
-<div class="form-group row mt-3">
-  <label for="BirthOrder" class="col-sm-4 col-form-label">Birth Order</label>
-  <div class="col-sm-8">
-    <input type="text" class="form-control" id="BirthOrder" name="BirthOrder" placeholder="e.g., 1st, 2nd, 3rd">
-  </div>
-</div>
-
-
-
-                    <br>
                     <div class="form-group row">
-  <label for="NumberOfSiblings" class="col-sm-4 col-form-label">Number of Siblings</label>
-  <div class="col-sm-8">
-    <input type="text" class="form-control" id="NumberOfSiblings" name="NumberOfSiblings" placeholder="Enter number of siblings">
-  </div>
-</div>
-
-
-                
-               
-                  
-                  </div>
-
-
-
-                  <div class="box-1" style="margin-left: 1%;">
-   
-                  <div class="form-group row">
-                      <label for="" class="col-sm-4 col-form-label">If Solo Parent, how many children do you have?</label>
+                      <label for="CivilStatus" class="col-sm-4 col-form-label">CIVIL STATUS</label>
                       <div class="col-sm-8">
-                        <input type="text" class="form-control" name="child_no" id="child_no" placeholder="No.">
-                      </div>
-                    </div>
-                    <br>
-
-            
-                    
-                    <div class="form-group row">
-                      <label for="" class="col-sm-4 col-form-label">Place of Birth</label>
-                      <div class="col-sm-8">
-                        <input type="text" class="form-control" name="PlaceOfBirth" id="PlaceOfBirth" placeholder="">
+                        <input type="text" class="form-control" id="Religion" value="<?php echo $CivilStatus; ?>" name="Religion" placeholder="Religion" readonly>
                       </div>
                     </div>
 
                     <br>
-
-                
-
-
-                    <hr>
-
-
-                    
                     <div class="form-group row">
-                      <label for="" class="col-sm-4 col-form-label">Permanent/Home/ <br>Provincial Address:</label>
+                      <label for="DateOfBirth" class="col-sm-4 col-form-label">Date of Birth</label>
                       <div class="col-sm-8">
-                        <input type="text" class="form-control" name="PermAddress" id="PermAddress" placeholder="">
+                        <input type="date" class="form-control" id="DateOfBirth" value="<?php echo $DadeOfBirth; ?>" name="DateOfBirth" placeholder="Date of Birth" readonly>
                       </div>
                     </div>
 
+                    <div class="form-group row mt-3">
+                      <label for="Religion" class="col-sm-4 col-form-label">Religion</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" id="Religion" value="<?php echo $Religion; ?>" name="Religion" readonly>
+                      </div>
+                    </div>
+
+                    <div class="form-group row mt-3">
+                      <label for="Tribe" class="col-sm-4 col-form-label">Tribe</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" id="Tribe" value="<?php echo $Tribe; ?>" name="Tribe" placeholder="Tribe" readonly>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="Ip" class="col-sm-4 col-form-label">If belonging to IP Community, specify</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" id="Ip" value="<?php echo $Ip; ?>" name="Ip" placeholder="IP Community" readonly>
+                      </div>
+                    </div>
+
+                    <div class="form-group row mt-3">
+                      <label for="Language" class="col-sm-4 col-form-label">Language/Dialect spoken at home</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" id="Language" value="<?php echo $Language; ?>" name="Language" placeholder="Language" readonly>
+                      </div>
+                    </div>
+
+                    <div class="form-group row mt-3">
+                      <label for="BirthOrder" class="col-sm-4 col-form-label">Birth Order</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" id="BirthOrder" value="<?php echo $BirthOrder; ?>" name="BirthOrder" placeholder="Birth Order" readonly>
+                      </div>
+                    </div>
+
+                    <div class="form-group row mt-3">
+                      <label for="NumberOfSiblings" class="col-sm-4 col-form-label">No. of Siblings</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" id="NumberOfSiblings" value="<?php echo $NumberOfSiblings; ?>" name="NumberOfSiblings" placeholder="Number of Siblings" readonly>
+                      </div>
+                    </div>
+
+                    <div class="form-group row mt-3">
+                      <label for="child_no" class="col-sm-4 col-form-label">If Child No, Please specify</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" id="child_no" value="<?php echo $child_no; ?>" name="child_no" placeholder="Child No" readonly>
+                      </div>
+                    </div>
+
+                    <div class="form-group row mt-3">
+                      <label for="PlaceOfBirth" class="col-sm-4 col-form-label">Place of Birth</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" id="PlaceOfBirth" value="<?php echo $PlaceOfBirth; ?>" name="PlaceOfBirth" placeholder="Place of Birth" readonly>
+                      </div>
+                    </div>
+
+                    <div class="form-group row mt-3">
+                      <label for="PermAddress" class="col-sm-4 col-form-label">Permanent Address</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" id="PermAddress" value="<?php echo $PermAddress; ?>" name="PermAddress" placeholder="Permanent Address" readonly>
+                      </div>
+                    </div>
 
                     <br>
 
@@ -292,12 +256,12 @@ br
                     <div class="form-group row">
                       <label for="" class="col-sm-4 col-form-label">Current/City Address</label>
                       <div class="col-sm-8">
-                        <input type="text" class="form-control" name="CurrentAddress" id="CurrentAddress" placeholder="">
+                        <input type="text" class="form-control" value="<?php echo $PlaceOfBirth; ?>" name="CurrentAddress" id="CurrentAddress" placeholder="">
                       </div>
                     </div>
 
 
-                 
+                    <button type="button" class="btn btn-primary" onclick="printPage()">Print</button> <!-- Print Button -->
 
                   </div>
                 </div>

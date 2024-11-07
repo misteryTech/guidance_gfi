@@ -26,7 +26,7 @@
     session_start();
 
     if(isset($_SESSION["user"])){
-        if(($_SESSION["user"])=="" or $_SESSION['usertype']!='d'){
+        if(($_SESSION["user"])=="" or $_SESSION['usertype']!='c'){
             header("location: ../login.php");
         }else{
             $useremail=$_SESSION["user"];
@@ -40,10 +40,10 @@
 
        //import database
        include("../connection.php");
-       $userrow = $database->query("select * from doctor where docemail='$useremail'");
+       $userrow = $database->query("select * from counselor where couemail='$useremail'");
        $userfetch=$userrow->fetch_assoc();
-       $userid= $userfetch["docid"];
-       $username=$userfetch["docname"];
+       $userid= $userfetch["couid"];
+       $username=$userfetch["couname"];
     //echo $userid;
     ?>
     <div class="container">
@@ -80,16 +80,20 @@
                     </td>
                 </tr>
                 
-                <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-session">
-                        <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">My Sessions</p></div></a>
-                    </td>
-                </tr>
+            
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-patient">
-                        <a href="patient.php" class="non-style-link-menu"><div><p class="menu-text">My Student</p></a></div>
+                        <a href="student.php" class="non-style-link-menu"><div><p class="menu-text">My Student</p></a></div>
                     </td>
                 </tr>
+
+                <tr class="menu-row" >
+                    <td class="menu-btn menu-icon-patient">
+                        <a href="incedent_report.php" class="non-style-link-menu"><div><p class="menu-text">Incident Report</p></a></div>
+                    </td>
+                </tr>
+
+
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-settings">
                         <a href="settings.php" class="non-style-link-menu"><div><p class="menu-text">Settings</p></a></div>
@@ -120,7 +124,9 @@
                         $today = date('Y-m-d');
                         echo $today;
 
-                        $list110 = $database->query("select * from schedule inner join appointment on schedule.scheduleid=appointment.scheduleid inner join patient on patient.pid=appointment.pid inner join doctor on schedule.docid=doctor.docid  where  doctor.docid=$userid ");
+                         $list110 = $database->query("select * from appointments where 
+                         
+                         appointments.counselor_id=$userid ");
 
                         ?>
                         </p>
@@ -144,32 +150,14 @@
                 <tr>
                     <td colspan="4" style="padding-top:10px;width: 100%;" >
                     
-                        <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">My Appointments (<?php echo $list110->num_rows; ?>)</p>
+                        <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">My Appointments (
+                            
+                            <?php echo $list110->num_rows; ?>)</p>
                     </td>
                     
                 </tr>
                 <tr>
-                    <td colspan="4" style="padding-top:0px;width: 100%;" >
-                        <center>
-                        <table class="filter-container" border="0" >
-                        <tr>
-                           <td width="10%">
-
-                           </td> 
-                        <td width="5%" style="text-align: center;">
-                        Date:
-                        </td>
-                        <td width="30%">
-                        <form action="" method="post">
-                            
-                            <input type="date" name="sheduledate" id="date" class="input-text filter-container-items" style="margin: 0;width: 95%;">
-
-                        </td>
-                        
-                    <td width="12%">
-                        <input type="submit"  name="filter" value=" Filter" class=" btn-primary-soft btn button-icon btn-filter"  style="padding: 15px; margin :0;width:100%">
-                        </form>
-                    </td>
+         
 
                     </tr>
                             </table>
@@ -182,7 +170,7 @@
                 <?php
 
 
-                    $sqlmain= "select appointment.appoid,schedule.scheduleid,schedule.title,doctor.docname,patient.pname,schedule.scheduledate,schedule.scheduletime,appointment.apponum,appointment.appodate from schedule inner join appointment on schedule.scheduleid=appointment.scheduleid inner join patient on patient.pid=appointment.pid inner join doctor on schedule.docid=doctor.docid  where  doctor.docid=$userid ";
+                    $sqlmain= "select * from appointments where  appointments.counselor_id=$userid";
 
                     if($_POST){
                         //print_r($_POST);
@@ -272,7 +260,7 @@
                                 else{
                                 for ( $x=0; $x<$result->num_rows;$x++){
                                     $row=$result->fetch_assoc();
-                                    $appoid=$row["appoid"];
+                                    $appoid=$row["appointment_id"];
                                     $scheduleid=$row["scheduleid"];
                                     $title=$row["title"];
                                     $docname=$row["docname"];

@@ -141,7 +141,7 @@
 
                                 $patientrow = $database->query("select  * from  patient;");
                                 $doctorrow = $database->query("select  * from  doctor;");
-                                $appointmentrow = $database->query("select  * from  appointment where appodate>='$today';");
+                                $appointmentrow = $database->query("select  * from  appointments where appointment_date>='$today';");
                                 $schedulerow = $database->query("select  * from  schedule where scheduledate='$today';");
 
 
@@ -221,23 +221,7 @@
                                 </td>
                             </tr>
                             <tr>
-                            <td style="width: 25%;">
-                                    <a href="?action=drop&id=<?php echo $userid.'&name='.$username ?>" class="non-style-link">
-                                    <div  class="dashboard-items setting-tabs"  style="padding:20px;margin:auto;width:95%;display: flex;">
-                                        <div class="btn-icon-back dashboard-icons-setting" style="background-image: url('../img/trash.png'); height: 10px; width: 10px; background-size:30px;"></div>
-                                        <div>
-                                                <div class="h1-dashboard" style="color: #ff5050;">
-                                                    Delete Account
-                                                    
-                                                </div><br>
-                                                <div class="h3-dashboard"  style="font-size: 15px;">
-                                                    Will Permanently Remove your Account
-                                                </div>
-                                        </div>
-                                                
-                                    </div>
-                                    </a>
-                                </td>
+                         
                                 
                             </tr>
                         </table>
@@ -275,7 +259,7 @@
             </div>
             ';
         }elseif($action=='view'){
-            $sqlmain= "select * from patient where pid=?";
+            $sqlmain= "select * from student where pid=?";
             $stmt = $database->prepare($sqlmain);
             $stmt->bind_param("i", $id);
             $stmt->execute();
@@ -390,7 +374,7 @@
             </div>
             ';
         }elseif($action=='edit'){
-            $sqlmain= "select * from patient where pid=?";
+            $sqlmain= "select * from student where pid=?";
             $stmt = $database->prepare($sqlmain);
             $stmt->bind_param("i", $id);
             $stmt->execute();

@@ -1,3 +1,11 @@
+<?php
+// Start the session
+session_start();
+
+// Assuming the student ID is stored in the session like this: $_SESSION['student_id']
+$student_id = isset($_SESSION['student_id']) ? $_SESSION['student_id'] : '';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,10 +70,10 @@ Bulaong Extension, General Santos City
                   <div class="form-group row">
                     <label for="CSID" class="col-sm-2 col-form-label">1. Student ID No.</label>
                     <div class="col-sm-4">
-                      <input type="text" class="form-control" name="student_id" id="student_id" placeholder="Student">
+                      <input type="text" class="form-control" name="student_id" id="student_id" value="<?php echo $student_id; ?>" >
                     </div>
                   </div>
-
+                  <?php echo $student_id; ?>
                   <br>
 
                   <h5><b> I. PERSONAL INFORMATION</b></h3>

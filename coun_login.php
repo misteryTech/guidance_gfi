@@ -26,44 +26,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['useremail'];
     $password = $_POST['userpassword'];
 
+    // Sanitize input to prevent SQL injection
+    $email = $database->real_escape_string($email);
+    
     // Query to check user email
     $result = $database->query("SELECT * FROM webuser WHERE email='$email'");
-    if ($result->num_rows == 1) {
-        $utype = $result->fetch_assoc()['usertype'];
+    
+    if ($result && $result->num_rows == 1) {
+        $user = $result->fetch_assoc();
+        $utype = $user['usertype'];
 
-        // Check user type and password
+        // Verify password
+        $passwordQuery = '';
+        $table = '';
         if ($utype == 'p') {
-            $checker = $database->query("SELECT * FROM student WHERE pemail='$email' AND ppassword='$password'");
-            if ($checker->num_rows == 1) {
-                $row = $checker->fetch_assoc();
-                $_SESSION['user'] = $email;
-                $_SESSION['pid'] = $row['pid'];
-                $_SESSION['usertype'] = 'p';
-                header('location: student/index.php');
-            } else {
-                $error = '<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Wrong credentials: Invalid email or password</label>';
-            }
-
+            $table = 'student';
+            $passwordQuery = "SELECT * FROM $table WHERE pemail='$email'";
         } elseif ($utype == 'a') {
-            $checker = $database->query("SELECT * FROM admin WHERE aemail='$email' AND apassword='$password'");
-            if ($checker->num_rows == 1) {
-                // Admin dashboard
-                $_SESSION['user'] = $email;
-                $_SESSION['usertype'] = 'a';
-                header('location: admin/index.php');
-            } else {
-                $error = '<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Wrong credentials: Invalid email or password</label>';
-            }
-
+            $table = 'admin';
+            $passwordQuery = "SELECT * FROM $table WHERE aemail='$email'";
         } elseif ($utype == 'c') {
-            $checker = $database->query("SELECT * FROM counselor WHERE couemail='$email' AND coupassword='$password'");
-            if ($checker->num_rows == 1) {
-                // Counselor dashboard
-                $_SESSION['user'] = $email;
-                $_SESSION['usertype'] = 'c';
-                header('location: counselor/index.php');
+            $table = 'counselor';
+            $passwordQuery = "SELECT * FROM $table WHERE couemail='$email'";
+        }
+
+        // Check user credentials
+        if (!empty($passwordQuery)) {
+            $checker = $database->query($passwordQuery);
+            if ($checker && $checker->num_rows == 1) {
+                $row = $checker->fetch_assoc();
+
+                // Use password_verify for better security
+                if (password_verify($password, $row['coupassword'] ?? $row['ppassword'] ?? $row['apassword'])) {
+                    $_SESSION['user'] = $email;
+                    $_SESSION['usertype'] = $utype;
+
+                    // Redirect based on user type
+                    if ($utype == 'p') {
+                        $_SESSION['pid'] = $row['pid'];
+                        header('location: student/index.php');
+                    } elseif ($utype == 'a') {
+                        header('location: admin/index.php');
+                    } elseif ($utype == 'c') {
+                        header('location: counselor/index.php');
+                    }
+                    exit();
+                } else {
+                    $error = '<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Wrong credentials: Invalid email or password</label>';
+                }
             } else {
-                $error = '<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Wrong credentials: Invalid email or password</label>';
+                $error = '<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">We can\'t find any account for this email.</label>';
             }
         }
     } else {
@@ -86,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <center>
         <div class="container">
-            <table border="0" style="margin: 0; padding: 0; width: 60%;">
+            <table border="0" style="margin: 0;padding: 0;width: 60%;">
                 <tr>
                     <td><p class="header-text">Welcome Back!</p></td>
                 </tr>
