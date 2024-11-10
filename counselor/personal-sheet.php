@@ -141,6 +141,9 @@ $conn->close();
               <div class="c1-container-header border-bottom">
                 <br>
                 <a href="index.php">Back To profile</a>
+
+
+
                 <center>
                   <h3>GENSANTOS FOUNDATION COLLEGE,INC. <br>Bulaong Extension, General Santos City</h3>
                   <h1>Student Personal DATA SHEET</h1>
@@ -152,6 +155,11 @@ $conn->close();
               <br>
 
               <div class="c1-container-body printable"> <!-- Add the 'printable' class -->
+                                
+              <div style="text-align: center; margin-bottom: 20px;">
+    <img src="../img/GFI-LOGO.png" alt="Logo" style="width: 150px; height: auto;">
+  </div>
+
                 <form action="process_registration.php" method="post">
                 <div class="holder-box-0">
                   <div class="form-group row student_id" >

@@ -51,7 +51,7 @@
         input[type="text"]:hover, input[type="date"]:hover, input[type="time"]:hover, select:hover, textarea:hover {
             border-color: transparent;
             background-image: linear-gradient(to right, #ff4b2b, #ff416c);
-            color: #fff;
+       
         }
 
         /* Button styling */

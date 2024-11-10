@@ -116,14 +116,14 @@
                     
                 </tr>
                 <?php
-                    if($_POST){
-                        $keyword=$_POST["search"];
+                    // if($_POST){
+                    //     $keyword=$_POST["search"];
                         
-                        $sqlmain= "select * from doctor where docemail='$keyword' or docname='$keyword' or docname like '$keyword%' or docname like '%$keyword' or docname like '%$keyword%'";
-                    }else{
-                        $sqlmain= "select * from counselor order by couid desc";
+                    //     $sqlmain= "select * from doctor where docemail='$keyword' or docname='$keyword' or docname like '$keyword%' or docname like '%$keyword' or docname like '%$keyword%'";
+                    // }else{
+                    //     $sqlmain= "select * from counselor order by couid desc";
 
-                    }
+                    // }
 
 
 
@@ -137,30 +137,36 @@
                         <thead>
                         <tr>
                                 <th class="table-headin">
-                                    
-                                
-                               Councelor Name
-                                
+                             Incident Date
                                 </th>
                                 <th class="table-headin">
-                                    Email
+                            Location
                                 </th>
                                 <th class="table-headin">
-                                    
-                                   Telephone
-                                    
+                            Description
                                 </th>
                                 <th class="table-headin">
-                                    
-                                    Events
-                                    
-                         </tr>
+                            Action Taken
+                            </th>
+                                <th class="table-headin">
+                            Reported By
+                            </th>
+
+                            <th>
+
+                            </th>
+
+                            
+                            
+                        </tr>
+
                         </thead>
                         <tbody>
                         
                             <?php
 
-                                
+                             $sqlmain= "select * from incident_reports order by id desc";
+
                                 $result= $database->query($sqlmain);
 
                                 if($result->num_rows==0){
@@ -183,29 +189,41 @@
                                 else{
                                 for ( $x=0; $x<$result->num_rows;$x++){
                                     $row=$result->fetch_assoc();
-                                    $couid=$row["couid"];
-                                    $name=$row["couname"];
-                                    $email=$row["couemail"];
-                                    $tele=$row["coutel"];
+                                    $couid=$row["id"];
+                                    $incident_date=$row["incident_date"];
+                                    $location=$row["location"];
+                                    $description=$row["description"];
+                                    $action_taken=$row["action_taken"];
+                                    $reported_by=$row["reported_by"];
                                     
                                     echo '<tr>
                                         <td> &nbsp;'.
-                                        substr($name,0,30)
+                                        substr($incident_date,0,30)
                                         .'</td>
                                         <td>
-                                        '.substr($email,0,20).'
+                                        '.substr($location,0,20).'
                                         </td>
                                         <td>
-                                            '.substr($tele,0,20).'
+                                            '.substr($description,0,20).'
                                         </td>
+
+                                             <td>
+                                            '.substr($action_taken,0,20).'
+                                        </td>
+
+
+                                               <td>
+                                            '.substr($reported_by,0,20).'
+                                        </td>
+
+
 
                                         <td>
                                         <div style="display:flex;justify-content: center;">
-                                        <a href="?action=edit&id='.$couid.'&error=0" class="non-style-link"><button  class="btn-primary-soft btn button-icon btn-edit"  style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><font class="tn-in-text">Edit</font></button></a>
-                                        &nbsp;&nbsp;&nbsp;
+                                        
                                         <a href="?action=view&id='.$couid.'" class="non-style-link"><button  class="btn-primary-soft btn button-icon btn-view"  style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><font class="tn-in-text">View</font></button></a>
                                        &nbsp;&nbsp;&nbsp;
-                                       <a href="?action=drop&id='.$couid.'&name='.$name.'" class="non-style-link"><button  class="btn-primary-soft btn button-icon btn-delete"  style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><font class="tn-in-text">Remove</font></button></a>
+                                   
                                         </div>
                                         </td>
                                     </tr>';
@@ -240,7 +258,7 @@
                     <div class="popup">
                     <center>
                         <h2>Are you sure?</h2>
-                        <a class="close" href="counselor.php">&times;</a>
+                        <a class="close" href="list-incident-report.php">&times;</a>
                         <div class="content">
                             You want to delete this record<br>('.substr($nameget,0,40).').
                             
@@ -255,20 +273,25 @@
             </div>
             ';
         }elseif($action=='view'){
-            $sqlmain= "select * from counselor where couid='$id'";
+            $sqlmain= "select * from incident_reports where id='$id'";
             $result= $database->query($sqlmain);
             $row=$result->fetch_assoc();
-            $name=$row["couname"];
-            $email=$row["couemail"];
-            $tele=$row['coutel'];
+            $incident_date=$row["incident_date"];
+            $location=$row["location"];
+            $description=$row["description"];
+            $action_taken=$row["action_taken"];
+            $reported_by=$row["reported_by"];
+            $attachment=$row["attachments"];
+            $witness=$row["witnesses"];
+            
             echo '
             <div id="popup1" class="overlay">
                     <div class="popup">
                     <center>
                         <h2></h2>
-                        <a class="close" href="counselor.php">&times;</a>
+                        <a class="close" href="list-incident-report.php">&times;</a>
                         <div class="content">
-                            View Counselor Detais<br>
+                            View Incident Detais<br>
                             
                         </div>
                         <div style="display: flex;justify-content: center;">
@@ -276,49 +299,115 @@
                         
                             <tr>
                                 <td>
-                                    <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">View Details.</p><br><br>
+                                    <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">View Incident Report.</p><br><br>
                                 </td>
                             </tr>
                             
+
+                                    <tr>
+                                
+                                <td class="label-td" colspan="2">
+                                    <label for="name" class="form-label">Incident Date: </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-td" colspan="2">
+                                    <br>
+                                  <b>  '.$incident_date.' </b><br>
+                                    <br>
+                                </td>
+                                
+                            </tr>
+
+
+
                             <tr>
                                 
                                 <td class="label-td" colspan="2">
-                                    <label for="name" class="form-label">Name: </label>
+                                    <label for="name" class="form-label">Location: </label>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label-td" colspan="2">
-                                    '.$name.'<br><br>
+                                   <br>
+                                    <b>  '.$location.'  </b><br>
+                                    <br>
                                 </td>
                                 
                             </tr>
                             <tr>
                                 <td class="label-td" colspan="2">
-                                    <label for="Email" class="form-label">Email: </label>
+                                    <label for="Email" class="form-label">Description: </label>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="label-td" colspan="2">
-                                '.$email.'<br><br>
+                                <br>
+                                <b>  '.$description.' </b><br>
+                                <br>
                                 </td>
                             </tr>
                            
                             <tr>
                                 <td class="label-td" colspan="2">
-                                    <label for="Tele" class="form-label">Telephone: </label>
+                                    <label for="Tele" class="form-label">Action Taken: </label>
                                 </td>
                             </tr>
                             <tr>
+                   
                                 <td class="label-td" colspan="2">
-                                '.$tele.'<br><br>
+                                          <br>
+                                <b>   '.$action_taken.' </b><br>
+                               
+                                <br>
                                 </td>
                             </tr>
                            
 
+
+                                 
+                            <tr>
+                                <td class="label-td" colspan="2">
+                                    <label for="Tele" class="form-label">Reported By: </label>
+                                </td>
+                            </tr>
+                            <tr>
+                   
+                                <td class="label-td" colspan="2">
+                                          <br>
+                                <b>   '.$reported_by.' </b><br>
+                               
+                                <br>
+                                </td>
+                            </tr>
+
+
+
+
+
+                                        
+                            <tr>
+                                <td class="label-td" colspan="2">
+                                    <label for="Tele" class="form-label">Witnesses: </label>
+                                </td>
+                            </tr>
+                            <tr>
+                   
+                                <td class="label-td" colspan="2">
+                                          <br>
+                                <b>   '.$witness.' </b><br>
+                               
+                                <br>
+                                </td>
+                            </tr>
+
+
+
+                            
                             
                             <tr>
                                 <td colspan="2">
-                                    <a href="counselor.php"><input type="button" value="OK" class="login-btn btn-primary-soft btn" ></a>
+                                    <a href="list-incident-report.php"><input type="button" value="OK" class="login-btn btn-primary-soft btn" ></a>
                                 
                                     
                                 </td>
@@ -349,7 +438,7 @@
                     <div class="popup">
                     <center>
                     
-                        <a class="close" href="counselor.php">&times;</a> 
+                        <a class="close" href="list-incident-report.php">&times;</a> 
                         <div style="display: flex;justify-content: center;">
                         <div class="abc">
                         <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
@@ -448,7 +537,7 @@
                             <center>
                             <br><br><br><br>
                                 <h2>New Record Added Successfully!</h2>
-                                <a class="close" href="counselor.php">&times;</a>
+                                <a class="close" href="list-incident-report.php">&times;</a>
                                 <div class="content">
                                     
                                     

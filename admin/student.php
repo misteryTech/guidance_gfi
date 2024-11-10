@@ -16,6 +16,11 @@
         .sub-table{
             animation: transitionIn-Y-bottom 0.5s;
         }
+
+        .input-error {
+    border: 2px solid red;
+}
+
 </style>
 </head>
 <body>
@@ -41,6 +46,9 @@
 
     
     ?>
+
+
+
     <div class="container">
                 <?php
                     include("menu.php");
@@ -658,6 +666,38 @@
 
 ?>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $("input[name='nic']").on("input", function() {
+        let nic = $(this).val();
+        let submitButton = $("input[type='submit']");
+
+
+        if (nic.length > 0) {
+            $.ajax({
+                url: "check_id.php",
+                method: "POST",
+                data: { nic: nic },
+                success: function(response) {
+                    if (response === "taken") {
+                        alert("This Student ID is already taken. Please choose another.");
+                        $("input[name='nic']").addClass("input-error");
+                        submitButton.prop("disabled", true); // Disable the submit button
+                    } else {
+                        $("input[name='nic']").removeClass("input-error");
+                        submitButton.prop("disabled", false); // Enable the submit button
+                    }
+                }
+            });
+        }
+    });
+});
+</script>
+
+
 
 </body>
 </html>

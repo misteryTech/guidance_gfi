@@ -96,6 +96,7 @@
                                 $patientrow = $database->query("select  * from  student;");
                                 $counselorrow = $database->query("select  * from  counselor;");
                                 $appointmentrow = $database->query("select  * from  appointments where appointment_date>='$today';");
+                                $appointmentcount = $database->query("select  * from  appointments ;");
                                 $schedulerow = $database->query("select  * from  schedule where scheduledate='$today';");
 
 
@@ -149,7 +150,7 @@
                                     <div  class="dashboard-items"  style="padding:20px;margin:auto;width:95%;display: flex; ">
                                         <div>
                                                 <div class="h1-dashboard" >
-                                                    <?php    echo $appointmentrow ->num_rows  ?>
+                                                    <?php    echo $appointmentcount ->num_rows  ?>
                                                 </div><br>
                                                 <div class="h3-dashboard" >
                                                 Appointment &nbsp;&nbsp;
@@ -189,20 +190,16 @@
                             <tr>
                                 <td>
                                     <p style="padding:10px;padding-left:48px;padding-bottom:0;font-size:23px;font-weight:700;color:var(--primarycolor);">
-                                        Upcoming Appointments until Next <?php  
-                                        echo date("l",strtotime("+1 week"));
-                                        ?>
+                                       List of Report Incident
                                     </p>
                                     <p style="padding-bottom:19px;padding-left:50px;font-size:15px;font-weight:500;color:#212529e3;line-height: 20px;">
-                                        Here's Quick access to Upcoming Appointments.
+                                        Here's Quick access to list of Report Incident.
                                     </p>
 
                                 </td>
                                 <td>
                                     <p style="text-align:right;padding:10px;padding-right:48px;padding-bottom:0;font-size:23px;font-weight:700;color:var(--primarycolor);">
-                                        Upcoming Sessions  until Next <?php  
-                                        echo date("l",strtotime("+1 week"));
-                                        ?>
+                                    List of Appointments
                                     </p>
                                     <p style="padding-bottom:19px;text-align:right;padding-right:50px;font-size:15px;font-weight:500;color:#212529e3;line-height: 20px;">
                                         Here's Quick access to Upcoming Sessions.
@@ -211,136 +208,186 @@
                             </tr>
                             <tr>
                                 <td width="50%">
-                                    <center>
-                                        <div class="abc scroll" style="height: 200px;">
-                                        <table width="85%" class="sub-table scrolldown" border="0">
-                                        <thead>
-                                        <tr>    
-                                                <th class="table-headin" style="font-size: 12px;">
-                                                        
-                                                    Appointment number
-                                                    
-                                                </th>
-                                                <th class="table-headin">
-                                                    Student name
-                                                </th>
-                                                <th class="table-headin">
-                                                    
-                                                
-                                                  Counselor
-                                                    
-                                                </th>
-                                                <th class="table-headin">
-                                                    
-                                                
-                                                    Session
-                                                    
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        
-                                     
-                 
-                                            </tbody>
-                
-                                        </table>
-                                        </div>
-                                        </center>
-                                </td>
-                                <td width="50%" style="padding: 0;">
-                                    <center>
-                                        <div class="abc scroll" style="height: 200px;padding: 0;margin: 0;">
-                                        <table width="85%" class="sub-table scrolldown" border="0" >
-                                        <thead>
-                                        <tr>
-                                                <th class="table-headin">
-                                                    
-                                                
-                                                 Session Title
-                                                
-                                                </th>
-                                                
-                                                <th class="table-headin">
-                                                 Counselor
-                                                </th>
-                                                <th class="table-headin">
-                                                    
-                                                Sheduled Date & Time
-                                                    
-                                                </th>
-                                                    
-                                                </tr>
-                                        </thead>
-                                        <tbody>
-                                        
-                                            <?php
-                                            $nextweek=date("Y-m-d",strtotime("+1 week"));
-                                            $sqlmain= "select schedule.scheduleid,schedule.title,doctor.docname,schedule.scheduledate,schedule.scheduletime,schedule.nop from schedule inner join doctor on schedule.docid=doctor.docid  where schedule.scheduledate>='$today' and schedule.scheduledate<='$nextweek' order by schedule.scheduledate desc"; 
-                                                $result= $database->query($sqlmain);
-                
-                                                if($result->num_rows==0){
-                                                    echo '<tr>
-                                                    <td colspan="4">
-                                                    <br><br><br><br>
-                                                    <center>
-                                                    <img src="../img/notfound.svg" width="25%">
-                                                    
-                                                    <br>
-                                                    <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We  couldnt find anything related to your keywords !</p>
-                                                    <a class="non-style-link" href="schedule.php"><button  class="login-btn btn-primary-soft btn"  style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp; Show all Sessions &nbsp;</font></button>
-                                                    </a>
-                                                    </center>
-                                                    <br><br><br><br>
-                                                    </td>
-                                                    </tr>';
-                                                    
-                                                }
-                                                else{
-                                                for ( $x=0; $x<$result->num_rows;$x++){
-                                                    $row=$result->fetch_assoc();
-                                                    $scheduleid=$row["scheduleid"];
-                                                    $title=$row["title"];
-                                                    $docname=$row["docname"];
-                                                    $scheduledate=$row["scheduledate"];
-                                                    $scheduletime=$row["scheduletime"];
-                                                    $nop=$row["nop"];
-                                                    echo '<tr>
-                                                        <td style="padding:20px;"> &nbsp;'.
-                                                        substr($title,0,30)
-                                                        .'</td>
-                                                        <td>
-                                                        '.substr($docname,0,20).'
-                                                        </td>
-                                                        <td style="text-align:center;">
-                                                            '.substr($scheduledate,0,10).' '.substr($scheduletime,0,5).'
-                                                        </td>
+                                
+                                <center>
+                                        <div class="abc scroll" style="height: 250px;">
+                                            <table width="85%" class="sub-table scrolldown" border="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="table-headin">
+                                                 Description
+                                                        </th>
+                                                        <th class="table-headin">
+                                                Location
+                                                        </th>
+                                                        <th class="table-headin">
+                                                        Incident Date
+                                                        </th>
 
-                
-                                                       
-                                                    </tr>';
-                                                    
-                                                }
-                                            }
-                                                 
-                                            ?>
-                 
-                                            </tbody>
-                
-                                        </table>
+                                                        <th class="table-headin">
+                                                         Report By
+                                                        </th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    $nextweek = date("Y-m-d", strtotime("+1 week"));
+                                                    $sqlmain= "select * from incident_reports ";
+                                                    $result= $database->query($sqlmain);
+
+                                                    if($result->num_rows==0){
+                                                        echo '
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <br><br><br><br>
+                                                                <center>
+                                                                    <img src="../img/notfound.svg" width="25%">
+                                                                    <br>
+                                                                    <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We couldnt find anything related to your sessions.</p>
+                                                                    <a class="non-style-link" href="incident_report.php"><button class="btn-primary-soft btn"  style="display: flex;justify-content: center;align-items: center;margin-left:20px;">Show all Incident</button>
+                                                                    </a>
+                                                                </center>
+                                                                <br><br><br><br>
+                                                            </td>
+                                                        </tr>';
+                                                    } else {
+                                                        for ( $x=0; $x<$result->num_rows;$x++){
+                                                            $row=$result->fetch_assoc();
+                                                            $id=$row["id"];
+                                                            $description=$row["description"];
+                                                            $location=$row["location"];
+                                                            $incident_date=$row["incident_date"];
+                                                            $report_by=$row["reported_by"];
+                                          
+                                                            echo '<tr>
+                                                                <td style="padding:20px;"> &nbsp;'.
+                                                                substr($description,0,20)
+                                                                .'</td>
+                                                                <td style="padding:20px;font-size:13px;">
+                                                                    '.substr($location,0,30).'
+                                                                </td>
+                                                                <td style="text-align:center;">
+                                                                    '.substr($incident_date,0,10).'
+                                                                </td>
+                                                                      <td style="text-align:center;">
+                                                                    '.substr($report_by,0,10).'
+                                                                </td>
+
+                                                            </tr>';
+                                                        }
+                                                    }
+                                                    ?>
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        </center>
+                                    </center>
+                                </td>
+                            <td>
+                                 
+                                    <center>
+                                        <div class="abc scroll" style="height: 250px;">
+                                            <table width="85%" class="sub-table scrolldown" border="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="table-headin">
+                                                        Student ID
+                                                        </th>
+                                                        <th class="table-headin">
+                                                         Reason
+                                                        </th>
+
+                                                        <th class="table-headin">
+                                                         Treatment
+                                                        </th>
+
+                                                        <th class="table-headin">
+                                                         Councselor
+                                                        </th>
+
+                                                        
+    
+
+
+                                                        <th class="table-headin">
+                                                            Date & Time
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    $nextweek = date("Y-m-d", strtotime("+1 week"));
+                                                    $sqlmain = "SELECT a.*,s.*,c.*
+                                                    FROM appointments a
+                                                    INNER JOIN student s ON a.student_id = s.pid
+                                                    INNER JOIN counselor c on a.counselor_id = c.couid";
+                                        
+                                                    $result= $database->query($sqlmain);
+
+                                                    if($result->num_rows==0){
+                                                        echo '
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <br><br><br><br>
+                                                                <center>
+                                                                    <img src="../img/notfound.svg" width="25%">
+                                                                    <br>
+                                                                    <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We couldnt find anything related to your sessions.</p>
+                                                                    <a class="non-style-link" href="schedule.php"><button class="btn-primary-soft btn"  style="display: flex;justify-content: center;align-items: center;margin-left:20px;">Show all Sessions</button>
+                                                                    </a>
+                                                                </center>
+                                                                <br><br><br><br>
+                                                            </td>
+                                                        </tr>';
+                                                    } else {
+                                                        for ( $x=0; $x<$result->num_rows;$x++){
+                                                            $row=$result->fetch_assoc();
+                                                            $student_id=$row["pnic"];
+                                                            $reason=$row["reason"];
+                                                            $apponum=$row["appointment_date"];
+                                                            $treatment=$row["treatment"];
+                                                            $counselor_id=$row["counselor_id"];
+                                                            $couname=$row["couname"];
+                                          
+                                                            echo '<tr>
+                                                                <td style="padding:20px;"> &nbsp;'.
+                                                                substr($student_id,0,20)
+                                                                .'</td>
+                                                                <td style="padding:20px;font-size:13px;">
+                                                                    '.substr($reason,0,30).'
+                                                                </td>
+                                                                  <td style="padding:20px;font-size:13px;">
+                                                                    '.substr($treatment,0,30).'
+                                                                </td>
+                                                                
+                                                                <td style="text-align:center;">
+                                                                    '.substr($couname,0,10).'
+                                                                </td>
+
+                                                                <td style="text-align:center;">
+                                                                    '.substr($apponum,0,10).'
+                                                                </td>
+
+                                                                
+                                                            </tr>';
+                                                        }
+                                                    }
+                                                    ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </center>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <center>
-                                        <a href="appointment.php" class="non-style-link"><button class="btn-primary btn" style="width:85%">Show all Appointments</button></a>
+                                        <a href="list-incident-report.php" class="non-style-link"><button class="btn-primary btn" style="width:85%">Show all Incident</button></a>
                                     </center>
                                 </td>
                                 <td>
                                     <center>
-                                        <a href="schedule.php" class="non-style-link"><button class="btn-primary btn" style="width:85%">Show all Sessions</button></a>
+                                        <a href="appointments.php" class="non-style-link"><button class="btn-primary btn" style="width:85%">Show all Appointment</button></a>
                                     </center>
                                 </td>
                             </tr>

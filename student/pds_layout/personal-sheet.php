@@ -82,6 +82,8 @@ $conn->close();
           .btn-submit{
             padding: 12px 50px;
           }
+
+          
 </style>
 <body>
     <div class="container-fluid">
@@ -113,6 +115,11 @@ $conn->close();
                 <br>
                
                 <a href="../index.php">Back To profile</a>
+
+                <div style="text-align: center; margin-bottom: 20px;">
+    <img src="../../img/GFI-LOGO.png" alt="Logo" style="width: 150px; height: auto;">
+  </div>
+
 
                 <center>    <h3>GENSANTOS FOUNDATION COLLEGE,INC. <br>
 Bulaong Extension, General Santos City

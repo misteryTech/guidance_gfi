@@ -37,17 +37,14 @@
                     </td>
                 </tr>
 
-                
-                <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-schedule">
-                        <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">Schedule</p></div></a>
-                    </td>
-                </tr>
+            
+
                 <tr class="menu-row">
                     <td class="menu-btn menu-icon-appoinment">
-                        <a href="appointment.php" class="non-style-link-menu"><div><p class="menu-text">Appointment</p></a></div>
+                        <a href="list-incident-report.php" class="non-style-link-menu"><div><p class="menu-text">Incident Report</p></a></div>
                     </td>
                 </tr>
+
                
 
             </table>

@@ -21,7 +21,71 @@
         .sub-table{
             animation: transitionIn-Y-bottom 0.5s;
         }
+
+        .dashbord-tables {
+            animation: transitionIn-Y-over 0.5s;
+        }
+        .filter-container {
+            animation: transitionIn-X 0.5s;
+        }
+       
+
+        .sub-table {
+            animation: transitionIn-Y-bottom 0.5s;
+            width: 80%;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-row {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        .form-label {
+            width: 150px;
+            font-weight: bold;
+            text-align: right;
+            margin-right: 10px;
+            color: #333;
+        }
+        .form-field {
+            flex: 1;
+        }
+        .form-field input[type="text"],
+        .form-field input[type="date"],
+        .form-field textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .form-field input[type="file"] {
+            padding: 5px;
+        }
+        .form-submit {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .form-submit input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .form-submit input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        
     </style>
+
     
     
 </head>
@@ -100,7 +164,7 @@
 
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-patient">
-                        <a href="incident_report.php" class="non-style-link-menu"><div><p class="menu-text">Incident Report</p></a></div>
+                        <a href="incident_report.php" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Incident Report</p></a></div>
                     </td>
                 </tr>
 
@@ -108,7 +172,7 @@
                 
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-settings  menu-active menu-icon-settings-active">
-                        <a href="settings.php" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Settings</p></a></div>
+                        <a href="settings.php" class="non-style-link-menu"  ><div><p class="menu-text">Settings</p></a></div>
                     </td>
                 </tr>
                 
@@ -137,8 +201,7 @@
                                     echo $today;
     
     
-                                    $studentrow = $database->query("select  * from  student;");
-                                    $doctorrow = $database->query("select  * from  doctor;");
+
                                     $appointmentrow = $database->query("select  * from  appointments where appointment_date>='$today';");
                                     $schedulerow = $database->query("select  * from  schedule where scheduledate='$today';");
     
@@ -156,7 +219,59 @@
 
         </table>
 
-
+        <div class="dash-body" style="margin-top: 15px">
+          
+            
+            <form action="process_incident_report.php" method="post" enctype="multipart/form-data">
+                <div class="sub-table">
+                    <div class="form-row">
+                        <label class="form-label">Incident Date:</label>
+                        <div class="form-field">
+                            <input type="date" name="incident_date" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Location:</label>
+                        <div class="form-field">
+                            <input type="text" name="location" placeholder="Enter incident location" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Reported By:</label>
+                        <div class="form-field">
+                            <input type="text" name="reported_by" placeholder="Enter reporter's name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Description:</label>
+                        <div class="form-field">
+                            <textarea name="description" rows="4" placeholder="Describe the incident in detail" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Witnesses:</label>
+                        <div class="form-field">
+                            <input type="text" name="witnesses" placeholder="Enter witnesses' names">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Action Taken:</label>
+                        <div class="form-field">
+                            <textarea name="action_taken" rows="3" placeholder="Describe any actions taken"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label">Attachments:</label>
+                        <div class="form-field">
+                            <input type="file" name="attachments[]" multiple>
+                        </div>
+                    </div>
+                    <div class="form-submit">
+                        <input type="submit" value="Submit Report">
+                    </div>
+                </div>
+            </form>
+        </div>
 
         </div>
     </div>
