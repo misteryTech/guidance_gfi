@@ -89,7 +89,7 @@
 
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-patient">
-                        <a href="incedent_report.php" class="non-style-link-menu"><div><p class="menu-text">Incident Report</p></a></div>
+                        <a href="incident_report.php" class="non-style-link-menu"><div><p class="menu-text">Incident Report</p></a></div>
                     </td>
                 </tr>
 
